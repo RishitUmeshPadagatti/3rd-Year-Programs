@@ -18,10 +18,10 @@ void del_end();
 void enqueue();
 void dqueue();
 void main_menu();
+
 int main()
 {
     main_menu();
-
     return 0;
 }
 

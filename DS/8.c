@@ -25,8 +25,8 @@ void insert_front();
 void del_front();
 void insert_end();
 void del_end();
-void enqueue();
-void dqueue();
+// void enqueue();
+// void dqueue();
 void main_menu();
 
 int main(){
@@ -48,8 +48,8 @@ void main_menu(){
         switch(ch){
             case 1: create(); break;
             case 2: display(); break;
-            case 3: enqueue(); break;
-            case 4: dqueue(); break;
+            // case 3: enqueue(); break;
+            // case 4: dqueue(); break;
             case 5: exit(0);
             default: printf("\nINVALID CHOICE\n");
         }
@@ -65,23 +65,36 @@ void create(){
 }
 
 void insert_end(){
+    NODE *newnode, *curptr=NULL;
+    newnode = (NODE*)malloc(sizeof(NODE));
+    printf("\nEnter ssn, name, department, designation, phone and salary\n");
+    scanf("%s%s%s%s%s%d", newnode->ssn, newnode->name, newnode->dept, newnode->desig, newnode->phno, &newnode->sal);
+
+    if (start==NULL){
+        newnode->rlink = NULL;
+        newnode->llink = NULL;
+        start = newnode;
+    }
+    else{
+        curptr = start
+    }
 
 }
 
 void display(){
     NODE *curptr = NULL;
-    int count = 0;
+    int count=0;
     if (start==NULL)
         printf("\nLIST EMPTY\n");
     else{
         curptr = start;
         printf("\nThe contents are\n");
-        printf("\nSSN\tNAME\tDEPT\tDESIGNATION\tPHONE\tSALARY\n");
+        printf("\nSSN\tNAME\t\tDEPARTMENT\t\tDESIGNATION\t\tPHONE\t\tSALARY\n");
         while(curptr!=NULL){
-            printf("%s\t%s\t%s\t%s\t%s\t%d\n", curptr->ssn, curptr->name, curptr->dept, curptr->desig, curptr->phno, curptr->sal);
-            count++;
+            printf("\n%s\t\t%s\t\t%s\t\t%s\t\t%s\t\t%d\n", curptr->ssn, curptr->name, curptr->dept, curptr->desig, curptr->phno, curptr->sal);
+            curptr++;
             curptr = curptr->rlink;
         }
-        printf("TOTAL NUMBER OF NODES IS: %d\n", count);
     }
+    printf("\nTOTAL NUMBER OF NODES IS %d", count);
 }

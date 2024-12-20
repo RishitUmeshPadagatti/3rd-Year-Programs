@@ -76,7 +76,7 @@ void insert_end(){
         start = newnode;
     }
     else{
-        curptr = start
+        curptr = start;
     }
 
 }

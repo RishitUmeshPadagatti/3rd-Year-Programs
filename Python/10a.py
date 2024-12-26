@@ -11,8 +11,7 @@ data = {
 df = pd.DataFrame(data)
 
 # Create a time series plot
-fig = go.Figure(data=go.Scatter(x=df['Date'], y=df['Value'],
-mode='lines+markers', name='Time Series'))
+fig = go.Figure(data=go.Scatter(x=df['Date'], y=df['Value'], mode='lines+markers', name='Time Series'))
 
 fig.update_layout(xaxis_title='Date', yaxis_title='Value', title='Time Series Plot')
 

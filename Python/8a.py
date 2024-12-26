@@ -1,8 +1,7 @@
 # Wap to explain working with bokeh line graph using Annotations and Legends
 
-from bokeh.plotting import figure, show
+from bokeh.plotting import figure, show, output_file
 from bokeh.models import ColumnDataSource, Label, LabelSet
-from bokeh.io import output_file
 
 x = [1, 2, 3, 4, 5]
 y = [2, 4, 6, 8, 10]

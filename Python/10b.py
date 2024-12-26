@@ -14,12 +14,16 @@ fig.update_geos(
     projection_scale=10,
     center=dict(lon=-95, lat=38),
     visible=False,
+
     showcoastlines = True,
     coastlinecolor = "RebeccaPurple",
+
     showland = True,
     landcolor = "LightGreen",
+
     showocean = True,
     oceancolor="LightBlue",
+    
     showlakes = True,
     lakecolor = "LightBlue"
 )

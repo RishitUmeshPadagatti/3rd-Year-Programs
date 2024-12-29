@@ -11,90 +11,191 @@
 #include <stdlib.h>
 
 typedef struct node {
-    char ssn[10], name[20], dept[10], desig[10], phno[10];
+    char ssn[10], name[20], dept[20], desig[20], phno[11];
     int sal;
     struct node *llink;
     struct node *rlink;
 } NODE;
-
 NODE *start = NULL;
 
+void main_menu();
 void create();
 void display();
+void enqueue();
+void dequeue();
 void insert_front();
-void del_front();
 void insert_end();
-void del_end();
-// void enqueue();
-// void dqueue();
-void main_menu();
+void delete_front();
+void delete_end();
 
 int main(){
     main_menu();
+    
     return 0;
 }
 
 void main_menu(){
     int ch;
     while(1){
-        printf("\nDOUBLY LINKED LIST IMPLEMENTATION\n");
-        printf("\n1. CREATE LIST\n");
-        printf("\n2. DISPLAY LIST\n");
-        printf("\n3. INPUT RESTRICTED QUEUE\n");
-        printf("\n4. OUTPUT RESTRICTED QUEUE\n");
-        printf("\n5. EXIT\n");
-        printf("\nENTER YOUR CHOICE\n");
+        printf("\n\nDOUBLY LINKED LIST IMPLEMENTATION");
+        printf("\n1. CREATE LIST");
+        printf("\n2. DISPLAY");
+        printf("\n3. ENQUEUE");
+        printf("\n4. DEQUEUE");
+        printf("\n5. EXIT");
+        printf("\nENTER YOUR CHOICE: ");
         scanf("%d", &ch);
         switch(ch){
             case 1: create(); break;
             case 2: display(); break;
-            // case 3: enqueue(); break;
-            // case 4: dqueue(); break;
+            case 3: enqueue(); break;
+            case 4: dequeue(); break;
             case 5: exit(0);
-            default: printf("\nINVALID CHOICE\n");
         }
     }
 }
 
 void create(){
     int n;
-    printf("\nEnter the number of nodes\n");
+    printf("Enter the number of nodes to create: ");
     scanf("%d", &n);
-    for (int i=1; i<=n; i++)
+    for (int i=0; i<n; i++)
         insert_end();
 }
 
-void insert_end(){
-    NODE *newnode, *curptr=NULL;
-    newnode = (NODE*)malloc(sizeof(NODE));
-    printf("\nEnter ssn, name, department, designation, phone and salary\n");
-    scanf("%s%s%s%s%s%d", newnode->ssn, newnode->name, newnode->dept, newnode->desig, newnode->phno, &newnode->sal);
+void display(){
+    if (start == NULL)
+        printf("No nodes to display\n");
+    else{
+        NODE *curptr = start;
+        printf("SSN\tNAME\tDEPARTMENT\tDESIGNATION\tPHONE\tSALARY\n");
+        while(curptr != NULL){
+            printf("%s\t%s\t%s\t%s\t%s\t%d\n", curptr->ssn, curptr->name, curptr->dept, curptr->desig, curptr->phno, curptr->sal);
+            curptr = curptr->rlink;
+        }
+    }
+}
 
-    if (start==NULL){
+void enqueue(){
+    int ch;
+    while(1){
+        printf("\nENQUEUE");
+        printf("\n1. INSERT FRONT");
+        printf("\n2. DELETE FRONT");
+        printf("\n3. DELETE END");
+        printf("\n4. DISPLAY");
+        printf("\n5. EXIT");
+        printf("\nENTER YOUR CHOICE: ");
+        scanf("%d", &ch);
+        switch(ch){
+            case 1: insert_front(); break;
+            case 2: delete_front(); break;
+            case 3: delete_end(); break;
+            case 4: display(); break;
+            case 5: main_menu(); break;
+        }
+    }
+}
+
+void dequeue(){
+    int ch;
+    while(1){
+        printf("\nDEQUEUE");
+        printf("\n1. INSERT FRONT");
+        printf("\n3. INSERT END");
+        printf("\n2. DELETE END");
+        printf("\n4. DISPLAY");
+        printf("\n5. EXIT");
+        printf("\nENTER YOUR CHOICE: ");
+        scanf("%d", &ch);
+        switch(ch){
+            case 1: insert_front(); break;
+            case 2: insert_end(); break;
+            case 3: delete_end(); break;
+            case 4: display(); break;
+            case 5: main_menu(); break;
+        }
+    }
+}
+
+void insert_front(){
+    NODE *newnode = (NODE*)malloc(sizeof(NODE));
+    printf("Enter SSN, name, department, designation, phone and salary\n");
+    scanf("%s%s%s%s%s%d", newnode->ssn, newnode->name, newnode->dept, newnode->desig, newnode->phno, &newnode->sal);
+    if (start == NULL){
         newnode->rlink = NULL;
         newnode->llink = NULL;
         start = newnode;
     }
     else{
-        curptr = start;
+        newnode->rlink = start;
+        newnode->llink = NULL;
+        start->llink = newnode;
+        start = newnode;
     }
-
 }
 
-void display(){
+void insert_end(){
     NODE *curptr = NULL;
-    int count=0;
-    if (start==NULL)
-        printf("\nLIST EMPTY\n");
+    NODE *newnode = (NODE*)malloc(sizeof(NODE));
+    printf("Enter SSN, name, department, designation, phone and salary\n");
+    scanf("%s%s%s%s%s%d", newnode->ssn, newnode->name, newnode->dept, newnode->desig, newnode->phno, &newnode->sal);
+    if (start == NULL){
+        newnode->llink = NULL;
+        newnode->rlink = NULL;
+        start = newnode;
+    }
     else{
         curptr = start;
-        printf("\nThe contents are\n");
-        printf("\nSSN\tNAME\t\tDEPARTMENT\t\tDESIGNATION\t\tPHONE\t\tSALARY\n");
-        while(curptr!=NULL){
-            printf("\n%s\t\t%s\t\t%s\t\t%s\t\t%s\t\t%d\n", curptr->ssn, curptr->name, curptr->dept, curptr->desig, curptr->phno, curptr->sal);
-            curptr++;
+        while(curptr->rlink != NULL)
             curptr = curptr->rlink;
-        }
+        newnode->llink = curptr;
+        newnode->rlink = NULL;
+        curptr->rlink = newnode;
     }
-    printf("\nTOTAL NUMBER OF NODES IS %d", count);
+}
+
+void delete_front(){
+    if (start == NULL)
+        printf("Nothing to delete!");
+    else if (start->rlink == NULL){
+        NODE *curptr = start;
+        printf("\nThe deleted information is");
+        printf("\nSSN\tNAME\tDEPARTMENT\tDESIGNATION\tPHONE\tSALARY");
+        printf("\n%s\t%s\t%s\t%s\t%s\t%d\n", curptr->ssn, curptr->name, curptr->dept, curptr->desig, curptr->phno, curptr->sal);
+        start = NULL;
+        free(curptr);
+    }
+    else {
+        NODE *curptr = start;
+        printf("\nThe deleted information is");
+        printf("\nSSN\tNAME\tDEPARTMENT\tDESIGNATION\tPHONE\tSALARY");
+        printf("\n%s\t%s\t%s\t%s\t%s\t%d\n", curptr->ssn, curptr->name, curptr->dept, curptr->desig, curptr->phno, curptr->sal);
+        start = start->rlink;
+        start->llink = NULL;
+        free(curptr);
+    }
+}
+
+void delete_end(){
+    if (start == NULL)
+        printf("Nothing to delete!");
+    else if (start->rlink == NULL){
+        NODE *curptr = start;
+        printf("\nThe deleted information is");
+        printf("\nSSN\tNAME\tDEPARTMENT\tDESIGNATION\tPHONE\tSALARY");
+        printf("\n%s\t%s\t%s\t%s\t%s\t%d\n", curptr->ssn, curptr->name, curptr->dept, curptr->desig, curptr->phno, curptr->sal);
+        start = NULL;
+        free(curptr);
+    }
+    else{
+        NODE *curptr = start;
+        while(curptr->rlink != NULL)
+            curptr = curptr->rlink;
+        curptr->llink->rlink = NULL;
+        printf("\nThe deleted information is");
+        printf("\nSSN\tNAME\tDEPARTMENT\tDESIGNATION\tPHONE\tSALARY");
+        printf("\n%s\t%s\t%s\t%s\t%s\t%d\n", curptr->ssn, curptr->name, curptr->dept, curptr->desig, curptr->phno, curptr->sal);
+        free(curptr);
+    }
 }

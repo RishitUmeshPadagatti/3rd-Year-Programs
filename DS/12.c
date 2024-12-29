@@ -6,24 +6,22 @@
 // implement hashing technique to map a given key K to the address space L. Resolve the
 // collision (if any) using linear probing
 
-#include <stdio.h>
+#include <stdio.h> 
 #include <stdlib.h>
 
-int n;                                  // Number of records
-int m;                                  // Hash Table size
-int *ht, count = 0, key[20];
-int hashIndex;
+int n;   // number of records
+int m;   // hash table
+int *ht, count = 0; 
 
 void insert(int key){
-    if (count == m){
-        printf("Hash Table is full and Record cannot be inserted");
-    }
+    if (count == m)
+        printf("Hash Table is full!");
     else{
-        hashIndex = key % m;
+        int hashIndex = key % m;
         if (ht[hashIndex] != -1){
-            printf("Collision Detected\n");
+            printf("Collision Detected!\n");
             while (ht[hashIndex] != -1)
-                hashIndex = (hashIndex+1) % m;
+                hashIndex = (hashIndex + 1) % m;
         }
         ht[hashIndex] = key;
         count++;
@@ -31,30 +29,30 @@ void insert(int key){
 }
 
 void display(){
-    int i;
-    if (count == 0){
-        printf("\nHash table is empty");
-        return;
+    if (count == 0)
+        printf("Hash Table Empty!");
+    else{
+        for(int i=0; i<m; i++){
+            printf("T[%d] --> %d\n", i, ht[i]);
+        }
     }
-    printf("\nHash Table contents are: \n");
-    for (i=0; i<n; i++)
-        printf("\nT[%d]-->%d", i, ht[i]);
 }
 
 int main(){
-    printf("\nEnter the number of employee records: ");
+    printf("Enter the number of records: ");
     scanf("%d", &n);
-    printf("\nEnter the size of the hash table: ");
+    printf("Enter the size of hash table: ");
     scanf("%d", &m);
 
-    ht = (int *)malloc(m*sizeof(int));
+    ht = (int *)malloc(m * sizeof(int));
     for (int i=0; i<m; i++)
         ht[i] = -1;
 
-    printf("Enter the four digit key values for N Employee Records\n");
-    for (int i=0; i<n; i++){
-        scanf("%d", &key[i]);
-        insert(key[i]);
+    printf("\nEnter the keys\n");
+    for(int i=0; i<n; i++){
+        int key;
+        scanf("%d", &key);
+        insert(key);
     }
 
     display();

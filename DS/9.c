@@ -48,10 +48,115 @@ NODE* readpoly(){
 void print(NODE *ptr){
     NODE *cur;
     cur = ptr->link;
+    while(cur != ptr){
+        printf("%d * x^%d * y^%d * z^%d", cur->coef, cur->x, cur->y, cur->z);
+        cur = cur->link;
+        if (cur != ptr){
+            printf(" + ");
+        }
+    }
+}
+
+void evaluate(NODE* ptr){
+    int res = 0;
+    int x, y, z, ex, ey, ez, cof;
+    NODE *cur;
+    printf("\nEnter the values of x, y and z: ");
+    scanf("%d%d%d", &x, &y, &z);
+    cur = ptr->link;
+    while (cur != ptr){
+        ex = cur->x;
+        ey = cur->y;
+        ez = cur->z;
+        cof = cur->coef;
+        res += cof * pow(x, ex) * pow(y, ey) * pow(z, ez);
+        cur = cur->link;
+    }
+    printf("Result: %d\n", res);
+}
+
+int compare(NODE *a, NODE *b){
+    if (a->x > b->x) return 1;
+    else if (a->x < b->x) return -1;
+    else if (a->y > b->y) return 1;
+    else if (a->y < b->y) return -1;
+    else if (a->z > b->z) return 1;
+    else if (a->z < b->z) return -1;
+    return 0;
+}
+
+NODE* addpoly(NODE *a, NODE *b){
+    NODE *starta, *c, *lastc, *temp;
+    int sum, done = 0;
+    starta = a;
+    a = a->link;
+    b = b->link;
+
+    c = getnode();
+    c->coef = -1;
+    c->x = -1;
+    c->y = -1;
+    c->z = -1;
+    c->link = c;  // Circular Linked List
+    lastc = c;
+
+    do{
+        temp = getnode();
+        switch(compare(a, b)){
+            case -1:temp->coef = b->coef;
+                    temp->x = b->x;
+                    temp->y = b->y;
+                    temp->z = b->z;
+                    b = b->link;
+                    break;
+            case 0: if (starta == a){
+                        done = 1;
+                        free(temp);
+                        continue;
+                    }
+                    else{
+                        sum = a->coef + b->coef;
+                        if (sum){
+                            temp->coef = sum;
+                            temp->x = a->x;
+                            temp->y = a->y;
+                            temp->z = a->z;
+                        }
+                        else{
+                            // skips terms with 0 coef
+                            free(temp);
+                            a = a->link;
+                            b = b->link;
+                            continue;
+                        }
+
+                        a = a->link;
+                        b = b->link;
+                    }
+                    break;
+            case 1: if (a == starta){
+                        done = 1;
+                        free(temp);
+                        continue;
+                    }
+                    temp->coef = a->coef;
+                    temp->x = a->x;
+                    temp->y = a->y;
+                    temp->z = a->z;
+                    a = a->link;
+                    break;
+        }
+        lastc->link = temp;
+        temp->link = c;  // circular
+        lastc = temp;
+    } while(!done);
+
+    return c;
 }
 
 int main(){
     int ch;
+    NODE *a = NULL, *b, *c;
     while(1){
         printf("\n1. Evaluate a Polynomial");
         printf("\n2. Adding 2 Polynomials");
@@ -60,11 +165,24 @@ int main(){
         scanf("%d", &ch);
         switch(ch){
             case 1: printf("\nEnter the elements of the polynomial A");
-                    NODE* a = readpoly();
-                    printf("\nThe Polynomial is: ");
+                    a = readpoly();
+                    printf("The Polynomial is: ");
                     print(a);
+                    printf("\n");
+                    evaluate(a);
                     break;
-
+            case 2: printf("\nENTER FIRST POLYNOMIAL");
+                    a = readpoly();
+                    printf("The Polynomial is: ");
+                    print(a);
+                    printf("\n\nENTER SECOND POLYNOMIAL");
+                    b = readpoly();
+                    printf("The Polynomial is: ");
+                    print(b);
+                    c = addpoly(a, b);
+                    printf("\nThe sum of two polynomial is: ");
+                    print(c);
+                    break;
             case 3: exit(0);
         }
     }
